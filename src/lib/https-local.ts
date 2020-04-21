@@ -1,15 +1,13 @@
 import { IncomingMessage } from 'http';
 import { connect } from 'net';
 import * as stream from 'stream';
-import { parse } from 'url';
 
 export function doNotCallProxy(
   req: IncomingMessage,
   clientSocket: stream.Duplex,
   head: Uint8Array | string
 ): void {
-  // connect to an origin server
-  const [host, port] = parse('http://' + req.url) as any;
+  const [host, port] = req?.url?.split(':', 2) as any;
   const srvSocket = connect(
     {
       host,

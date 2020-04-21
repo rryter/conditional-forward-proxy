@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
       "type": "node",
       "request": "launch",
       "name": "Debug Project",
@@ -8,7 +9,7 @@
       "cwd": "${workspaceFolder}/build",
       // Replace this with your project root. If there are multiple, you can
       // automatically run the currently visible file with: "program": ${file}"
-      "program": "${workspaceFolder}/src/cli/cli.ts",
+      "program": "${workspaceFolder}/src/lib/proxy.ts",
       // "args": ["--no-install"],
       "outFiles": ["${workspaceFolder}/build/main/**/*.js"],
       "skipFiles": [
@@ -19,10 +20,7 @@
       "stopOnEntry": true,
       "smartStep": true,
       "runtimeArgs": ["--nolazy"],
-      "env": {
-        "TYPESCRIPT_STARTER_REPO_URL": "${workspaceFolder}"
-      },
-      "console": "externalTerminal"
+      "console": "integratedTerminal"
     },
     {
       "type": "node",
@@ -35,5 +33,6 @@
       // "preLaunchTask": "npm: build",
       // "smartStep": true,
       "runtimeArgs": ["--nolazy"]
-    }]
+    }
+  ]
 }
