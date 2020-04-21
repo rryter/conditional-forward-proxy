@@ -1,11 +1,13 @@
 import { IncomingMessage, request, ServerResponse } from 'http';
 import * as Pino from 'pino';
 import * as stream from 'stream';
+import { ForwardProxy } from '../types/forward-proxy';
 
 export const callProxy = (
   req: IncomingMessage,
   socket: stream.Duplex,
-  logger: Pino.Logger
+  logger: Pino.Logger,
+  forwardProxy: ForwardProxy
 ) => {
   logger.info('Forwarding request to external proxy: 127.0.0.1:3128');
   logger.info(req);
@@ -13,13 +15,12 @@ export const callProxy = (
   const connectOptions = {
     agent: false,
     headers: req.headers,
-    host: '127.0.0.1',
+    host: forwardProxy.host.toString(),
     method: 'CONNECT',
     path: req.url,
-    port: 3128
+    port: forwardProxy.port
   };
 
-  // from TunnelingAgent.prototype.createSocket
   const connectReq = request(connectOptions);
   connectReq.useChunkedEncodingByDefault = false;
   connectReq.once('response', onResponse);
@@ -58,13 +59,13 @@ export const callProxy = (
   }
 
   function onError(error: Error): void {
+    logger.fatal(
+      `Error when forwarding rquest.\r\n 
+           StatusCode: ${error.message}\r\n 
+           Message: ${error.stack}`
+    );
     socket.write('HTTP/1.1 500 SERVER ERROR\r\n\r\n');
     socket.end();
     socket.destroy();
-    logger.fatal(
-      `Error when forwarding rquest.\r\n 
-         StatusCode: ${error.message}\r\n 
-         Message: ${error.stack}`
-    );
   }
 };

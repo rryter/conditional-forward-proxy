@@ -9,7 +9,7 @@
       "cwd": "${workspaceFolder}/build",
       // Replace this with your project root. If there are multiple, you can
       // automatically run the currently visible file with: "program": ${file}"
-      "program": "${workspaceFolder}/src/lib/proxy.ts",
+      "program": "${workspaceFolder}/src/index.ts",
       // "args": ["--no-install"],
       "outFiles": ["${workspaceFolder}/build/main/**/*.js"],
       "skipFiles": [
@@ -17,7 +17,7 @@
         "${workspaceFolder}/node_modules/**/*.js"
       ],
       "preLaunchTask": "npm: build",
-      "stopOnEntry": true,
+      "stopOnEntry": false,
       "smartStep": true,
       "runtimeArgs": ["--nolazy"],
       "console": "integratedTerminal"

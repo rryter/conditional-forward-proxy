@@ -3,29 +3,38 @@ import { createProxyServer } from 'http-proxy';
 import 'net';
 import pino from 'pino';
 import 'url';
+import { ForwardProxy } from '../types/forward-proxy';
 import { doNotCallProxy } from './https-local';
 import { callProxy } from './https-proxy';
 
 const logger = pino({
-  name: 'CF-Proxy'
+  name: 'CF-Proxy',
+  prettyPrint: true
 });
-
-const conditionalProxyPort = 5050;
-const proxy = createProxyServer({});
-const server = createServer((req, res) => {
-  proxy.web(req, res, {
-    forward: 'http://127.0.0.1:3128',
-    secure: false,
-    toProxy: true
+export function createConditionalForwardProxy(
+  port: number,
+  proxyToForwardTo: ForwardProxy
+): void {
+  const conditionalProxyPort = port;
+  const proxy = createProxyServer({});
+  const server = createServer((req, res) => {
+    proxy.web(req, res, {
+      forward: {
+        host: proxyToForwardTo.host.toString(),
+        port: proxyToForwardTo.port.toString()
+      },
+      secure: false,
+      toProxy: true
+    });
   });
-});
 
-server.on('connect', (req, clientSocket, head) => {
-  const [host] = req.url.split(':', 2);
-  !host.includes('mobicorp')
-    ? doNotCallProxy(req, clientSocket, head, logger)
-    : callProxy(req, clientSocket, logger);
-});
+  server.on('connect', (req, clientSocket, head) => {
+    const [requestHost] = req.url.split(':', 2);
+    !requestHost.includes('mobicorp')
+      ? doNotCallProxy(req, clientSocket, head, logger)
+      : callProxy(req, clientSocket, logger, proxyToForwardTo);
+  });
 
-logger.info(`CFProxy started and listening on port ${conditionalProxyPort}`);
-server.listen(conditionalProxyPort);
+  logger.info(`CFProxy started and listening on port ${conditionalProxyPort}`);
+  server.listen(conditionalProxyPort);
+}
