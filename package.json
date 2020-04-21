@@ -1,11 +1,11 @@
 {
-  "name": "conditional-forward-proxy",
+  "name": "@twy-gmbh/conditional-forward-proxy",
   "version": "1.0.0",
   "description": "HTTP / HTTPS forward proxy",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/YOUR_GITHUB_USER_NAME/conditional-forward-proxy",
+  "repository": "https://github.com/rryter/conditional-forward-proxy",
   "license": "MIT",
   "keywords": [],
   "scripts": {
