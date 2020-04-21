@@ -1,8 +1,14 @@
 import { IncomingMessage, request, ServerResponse } from 'http';
+import * as Pino from 'pino';
 import * as stream from 'stream';
 
-export const callProxy = (req: IncomingMessage, socket: stream.Duplex) => {
-  //   console.log('Send request to squid proxy.');
+export const callProxy = (
+  req: IncomingMessage,
+  socket: stream.Duplex,
+  logger: Pino.Logger
+) => {
+  logger.info('Forwarding request to external proxy: 127.0.0.1:3128');
+  logger.info(req);
 
   const connectOptions = {
     agent: false,
@@ -40,15 +46,25 @@ export const callProxy = (req: IncomingMessage, socket: stream.Duplex) => {
       socket.pipe(proxySocket);
       proxySocket.pipe(socket);
     } else {
+      logger.fatal(
+        `Error when forwarding rquest.\r\n 
+         StatusCode: ${res.statusCode}\r\n 
+         Message: ${res.statusMessage}`
+      );
       socket.write('HTTP/1.1 500 SERVER ERROR\r\n\r\n');
       socket.end();
       socket.destroy();
     }
   }
 
-  function onError(): void {
+  function onError(error: Error): void {
     socket.write('HTTP/1.1 500 SERVER ERROR\r\n\r\n');
     socket.end();
     socket.destroy();
+    logger.fatal(
+      `Error when forwarding rquest.\r\n 
+         StatusCode: ${error.message}\r\n 
+         Message: ${error.stack}`
+    );
   }
 };

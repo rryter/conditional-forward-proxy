@@ -1,10 +1,16 @@
 import { createServer } from 'http';
 import { createProxyServer } from 'http-proxy';
 import 'net';
+import pino from 'pino';
 import 'url';
 import { doNotCallProxy } from './https-local';
 import { callProxy } from './https-proxy';
 
+const logger = pino({
+  name: 'CF-Proxy'
+});
+
+const conditionalProxyPort = 5050;
 const proxy = createProxyServer({});
 const server = createServer((req, res) => {
   proxy.web(req, res, {
@@ -17,9 +23,9 @@ const server = createServer((req, res) => {
 server.on('connect', (req, clientSocket, head) => {
   const [host] = req.url.split(':', 2);
   !host.includes('mobicorp')
-    ? doNotCallProxy(req, clientSocket, head)
-    : callProxy(req, clientSocket);
+    ? doNotCallProxy(req, clientSocket, head, logger)
+    : callProxy(req, clientSocket, logger);
 });
 
-// console.log('listening on port 5050');
-server.listen(5050);
+logger.info(`CFProxy started and listening on port ${conditionalProxyPort}`);
+server.listen(conditionalProxyPort);
