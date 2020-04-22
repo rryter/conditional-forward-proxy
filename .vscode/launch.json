@@ -10,7 +10,7 @@
       // Replace this with your project root. If there are multiple, you can
       // automatically run the currently visible file with: "program": ${file}"
       "program": "${workspaceFolder}/src/index.ts",
-      // "args": ["--no-install"],
+      "args": ["-p 5050 -ri 127.0.0.1 -rp 3128"],
       "outFiles": ["${workspaceFolder}/build/main/**/*.js"],
       "skipFiles": [
         "<node_internals>/**/*.js",

@@ -1,19 +1,16 @@
 import { createServer } from 'http';
 import { createProxyServer } from 'http-proxy';
 import 'net';
-import pino from 'pino';
+import P from 'pino';
 import 'url';
 import { ForwardProxy } from '../types/forward-proxy';
 import { doNotCallProxy } from './https-local';
 import { callProxy } from './https-proxy';
 
-const logger = pino({
-  name: 'CF-Proxy',
-  prettyPrint: true
-});
 export function createConditionalForwardProxy(
   port: number,
-  proxyToForwardTo: ForwardProxy
+  proxyToForwardTo: ForwardProxy,
+  logger: P.Logger
 ): void {
   const conditionalProxyPort = port;
   const proxy = createProxyServer({});
@@ -35,6 +32,9 @@ export function createConditionalForwardProxy(
       : callProxy(req, clientSocket, logger, proxyToForwardTo);
   });
 
-  logger.info(`CFProxy started and listening on port ${conditionalProxyPort}`);
+  logger.info(`CFProxy is now running on port ${conditionalProxyPort}`);
+  logger.info(
+    `Remote Proxy: http://${proxyToForwardTo.host.address}:${proxyToForwardTo.port}`
+  );
   server.listen(conditionalProxyPort);
 }
