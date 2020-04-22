@@ -47,7 +47,7 @@ export const callProxy = (
       socket.pipe(proxySocket);
       proxySocket.pipe(socket);
     } else {
-      logger.fatal(
+      logger.error(
         `Error when forwarding rquest.\r\n 
          StatusCode: ${res.statusCode}\r\n 
          Message: ${res.statusMessage}`
@@ -59,7 +59,7 @@ export const callProxy = (
   }
 
   function onError(error: Error): void {
-    logger.fatal(
+    logger.error(
       `Error when forwarding rquest.\r\n 
            StatusCode: ${error.message}\r\n 
            Message: ${error.stack}`
