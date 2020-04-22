@@ -1,5 +1,23 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+"typescript.tsdk": "node_modules/typescript/lib",
+"workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#005c6d",
+    "activityBar.activeBorder": "#400036",
+    "activityBar.background": "#005c6d",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#400036",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "statusBar.background": "#00313a",
+    "statusBar.border": "#00313a",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#005c6d",
+    "titleBar.activeBackground": "#00313a",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.border": "#00313a",
+    "titleBar.inactiveBackground": "#00313a99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+}
   // "typescript.implementationsCodeLens.enabled": true
   // "typescript.referencesCodeLens.enabled": true
 }

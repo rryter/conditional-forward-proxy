@@ -9,13 +9,14 @@ export const callProxy = (
   logger: Pino.Logger,
   forwardProxy: ForwardProxy
 ) => {
-  logger.info('Forwarding request to external proxy: 127.0.0.1:3128');
-  logger.info(req);
+  logger.info(
+    `Handling '${req.method} ${req.url}' via ${forwardProxy.host.address}:${forwardProxy.port} proxy`
+  );
 
   const connectOptions = {
     agent: false,
     headers: req.headers,
-    host: forwardProxy.host.toString(),
+    host: forwardProxy.host.address,
     method: 'CONNECT',
     path: req.url,
     port: forwardProxy.port
@@ -23,26 +24,29 @@ export const callProxy = (
 
   const connectReq = request(connectOptions);
   connectReq.useChunkedEncodingByDefault = false;
-  connectReq.once('response', onResponse);
-  connectReq.once('upgrade', onUpgrade);
+  // connectReq.once('response', onResponse);
+  // connectReq.once('upgrade', onUpgrade);
   connectReq.once('connect', onConnect);
   connectReq.once('error', onError);
   connectReq.end();
 
-  function onResponse(res: any): void {
-    res.upgrade = true;
-  }
+  //   function onResponse(res: any): void {
+  //     res.upgrade = true;
+  //   }
 
-  function onUpgrade(res: ServerResponse, proxySocket: stream.Duplex): void {
-    process.nextTick(() => {
-      onConnect(res, proxySocket);
-    });
-  }
+  //   function onUpgrade(res: ServerResponse, proxySocket: stream.Duplex): void {
+  //     process.nextTick(() => {
+  //       onConnect(res, proxySocket);
+  //     });
+  //   }
 
   function onConnect(res: ServerResponse, proxySocket: stream.Duplex): void {
     proxySocket.removeAllListeners();
 
     if (res.statusCode === 200) {
+      logger.info(
+        `HTTP/${req.httpVersion} ${res.statusCode} '${req.method} ${req.url}'`
+      );
       socket.write('HTTP/1.1 200 OK\r\n\r\n');
       socket.pipe(proxySocket);
       proxySocket.pipe(socket);

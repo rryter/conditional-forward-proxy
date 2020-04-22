@@ -10,12 +10,12 @@ import pino from 'pino';
 import { createConditionalForwardProxy } from './lib/proxy';
 
 const logger = pino({
-  name: 'CF-Proxy',
+  name: 'cfproxy',
   prettyPrint: true
 });
 
 clear();
-CFonts.say('CF-Proxy', {
+CFonts.say('cfproxy', {
   align: 'left', // define text alignment
   background: 'transparent', // define the background color, you can also use `backgroundColor` here as key
   colors: ['system'], // define all colors
@@ -33,10 +33,9 @@ CFonts.say('CF-Proxy', {
 program
   .version('1.0.1')
   .description('A minimal HTTP / HTTPS forwarding proxy')
-  .option('-p, --port <port>', 'Port. Default: 5050')
-  .option('-ri, --remoteProxyIp <remoteIp>', 'Remote Proxy IP')
-  .option('-rp, --remoteProxyPort <remotePort>', 'Remote Proxy Port')
-  .option('-l, --logLevel', 'Loglevel')
+  .option('-p, --port <port>')
+  .option('-ri, --remoteProxyIp <remoteIp>')
+  .option('-rp, --remoteProxyPort <remotePort>')
   .parse(process.argv);
 
 if (!program.port || !program.remoteProxyIp || !program.remoteProxyPort) {
@@ -53,6 +52,7 @@ if (!program.port || !program.remoteProxyIp || !program.remoteProxyPort) {
         when: () => !program.port
       },
       {
+        default: '127.0.0.1',
         message: 'Remote Proxy IP',
         name: 'remoteProxyIp',
         type: 'input',
