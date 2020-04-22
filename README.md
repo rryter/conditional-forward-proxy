@@ -10,12 +10,8 @@ from the current machine, or sent to another proxy.
 1.  [Documentation](#documentation)
     1.  [Installation](#installation)
     2.  [Usage](#usage)
-2.  [License](#license)
-
-## What is it?
-
-**`cfproxy.js`** Conditionally either execute the request
-on the current machine, or forward it to another HTTP / HTTPS proxy.
+2.  [Issues](#issues)
+3.  [License](#license)
 
 ## [Documentation](#documentation)
 
@@ -29,20 +25,23 @@ on the current machine, or forward it to another HTTP / HTTPS proxy.
 npm install -g @twy-gmbh/conditional-forward-proxy
 ```
 
-<a name="usage"></a>
-
 ### Usage
 
-For testing:
+<a name="usage"></a>
+
+For testing purposes:
 
 ```shell
 cfproxy
 ```
 
-For permanent use:
+For permanent use:<br>
 https://www.axllent.org/docs/view/nodejs-service-with-systemd/
 
-Disclaimer: Please be advised this library is not (yet) tested. Do not use for production environments.
+**Disclaimer:**<br>
+Please be advised this library is not (yet) tested. Do not use for production environments.
+
+### Issues
 
 <a name="issues"></a>
 
