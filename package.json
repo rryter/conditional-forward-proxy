@@ -1,6 +1,6 @@
 {
   "name": "@twy-gmbh/conditional-forward-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "HTTP / HTTPS forward proxy",
   "main": "build/main/index.js",
   "bin": {
